@@ -26,12 +26,15 @@ public class EmployeeController {
         return "homePage";
 
     }
+
     @GetMapping("/search")
     public String search(@RequestParam Map<String, String> Params, Model model) {
-
-        model.addAttribute("users", employeeService.SearchById(Long.parseLong(Params.getOrDefault("id", "0"))));
-        System.out.println(employeeService.SearchById(Long.parseLong(Params.getOrDefault("id", "0"))));
-        return "search";
+        try {
+            model.addAttribute("users", employeeService.SearchById(Long.parseLong(Params.getOrDefault("id", "0"))));
+            return "search";
+        } catch (NumberFormatException e) {
+            return "search";
+        }
 
     }
 
@@ -43,7 +46,7 @@ public class EmployeeController {
 
     @GetMapping("/add")
     public String add(@RequestParam Map<String, String> Params) {
-        if(employeeService.edit(Params)) {
+        if (employeeService.edit(Params)) {
             return "redirect:/";
         }
         return "add";
